@@ -3,18 +3,6 @@ var app = builder.Build();
 app.Use(async (context, next) =>
 {
     Endpoint? endpoint = context.GetEndpoint();
-    if(endpoint != null)
-    {
-        await context.Response.WriteAsync($"EndPoint:{endpoint.DisplayName}\n");
-    }
-    await next(context);
-});
-
-app.UseRouting();
-
-app.Use(async (context, next) =>
-{
-    Endpoint? endpoint = context.GetEndpoint();
     if (endpoint != null)
     {
         await context.Response.WriteAsync($"EndPoint:{endpoint.DisplayName}\n");
@@ -22,18 +10,26 @@ app.Use(async (context, next) =>
     await next(context);
 });
 
+//enable routing
+app.UseRouting();
+
 app.UseEndpoints(endpoints =>
 {
-
-    //whenever a middleware is executed basically a routing , it is call as endpoint
-    endpoints.MapGet("map1", async (context) =>
+    endpoints.Map("files/{filename}.{extension}", async
+        context =>
     {
-        await context.Response.WriteAsync("In Map 1");
+        string? filename = Convert.ToString(context.Request.RouteValues["filename"]);
+        string? extension = Convert.ToString(context.Request.RouteValues["extension"]);
+
+        await context.Response.WriteAsync($"In files {filename}-{extension}");
     });
-
-    endpoints.MapPost("map2", async (context) =>
+    endpoints.Map("employee/profile/{Employeename}", async
+            context =>
     {
-        await context.Response.WriteAsync("In Map 2");
+            string? employeeName = Convert.ToString(context.Request.RouteValues["employeename"]);
+            await context.Response.WriteAsync($"In Employee profile {employeeName}");
+
+
     });
 });
 app.Run(async context =>
