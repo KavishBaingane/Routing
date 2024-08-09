@@ -29,7 +29,24 @@ app.UseEndpoints(endpoints =>
             string? employeeName = Convert.ToString(context.Request.RouteValues["employeename"]);
             await context.Response.WriteAsync($"In Employee profile {employeeName}");
 
+        
+        
+    });
+    //Eg : product/details/1
+    endpoints.Map("products/details/{id?}", async
+        context =>
+    {
+        if (context.Request.RouteValues.ContainsKey("id"))
+        {
+            int Id = Convert.ToInt32(context.Request.RouteValues["id"]);
+            await context.Response.WriteAsync($"The product eith the Id is --->{Id}");
 
+        }
+        else
+        {
+            await context.Response.WriteAsync($"Product id is not supplied");
+
+        }
     });
 });
 app.Run(async context =>
