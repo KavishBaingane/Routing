@@ -1,4 +1,10 @@
+using Routing.CustomConstraints;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddRouting(options =>
+{
+    options.ConstraintMap.Add("months", typeof(MonthsCustomConstraint));
+});
 var app = builder.Build();
 app.Use(async (context, next) =>
 {
@@ -65,7 +71,7 @@ app.UseEndpoints(endpoints =>
         await context.Response.WriteAsync($"City Information - {cityId}");
     });
     //Sales report / 2024/ apr
-    endpoints.Map("sales-report/{year:int:min(1900)}/{month:regex(^(apr|oct|jan|dec|feb)$)}", async context =>
+    endpoints.Map("sales-report/{year:int:min(1900)}/{month:months}", async context =>
     {
         int year = Convert.ToInt32(context.Request.RouteValues["year"]);
         string? month = Convert.ToString(context.Request.RouteValues["month"]);
