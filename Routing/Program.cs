@@ -96,6 +96,13 @@ app.UseEndpoints(endpoints =>
         }
 
     });
+
+    //2024 Jan 
+    endpoints.Map("sales-report/2024/jan", async context =>
+    {
+        await context.Response.WriteAsync("sales report exclusively for 2024 - Jan");
+
+    });
 });
 app.Run(async context =>
 {
