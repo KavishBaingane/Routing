@@ -65,11 +65,11 @@ app.UseEndpoints(endpoints =>
         await context.Response.WriteAsync($"City Information - {cityId}");
     });
     //Sales report / 2024/ apr
-    endpoints.Map("sales-report/{year:int:min(1900)}/{month:regex(^(apr|oct|jan|dec)$)}", async context =>
+    endpoints.Map("sales-report/{year:int:min(1900)}/{month:regex(^(apr|oct|jan|dec|feb)$)}", async context =>
     {
         int year = Convert.ToInt32(context.Request.RouteValues["year"]);
         string? month = Convert.ToString(context.Request.RouteValues["month"]);
-        if(month=="apr"|| month=="jul" || month=="oct"|| month == "jan")
+        if (month == "apr" || month == "jul" || month == "oct" || month == "jan")
         {
             await context.Response.WriteAsync($"sales report - {year}-{month}");
         }
@@ -78,11 +78,17 @@ app.UseEndpoints(endpoints =>
             await context.Response.WriteAsync($"Good Man u did this in {month}");
 
         }
+
+        else if (month == "feb")
+        {
+            await context.Response.WriteAsync($"It's ok but try other than this {month}");
+
+        }
         else
         {
             await context.Response.WriteAsync($"{month} is not allowed");
         }
-        
+
     });
 });
 app.Run(async context =>
