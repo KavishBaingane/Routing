@@ -65,13 +65,18 @@ app.UseEndpoints(endpoints =>
         await context.Response.WriteAsync($"City Information - {cityId}");
     });
     //Sales report / 2024/ apr
-    endpoints.Map("sales-report/{year:int:min(1900)}/{month:regex(^(apr|oct|jan)$)}", async context =>
+    endpoints.Map("sales-report/{year:int:min(1900)}/{month:regex(^(apr|oct|jan|dec)$)}", async context =>
     {
         int year = Convert.ToInt32(context.Request.RouteValues["year"]);
         string? month = Convert.ToString(context.Request.RouteValues["month"]);
         if(month=="apr"|| month=="jul" || month=="oct"|| month == "jan")
         {
             await context.Response.WriteAsync($"sales report - {year}-{month}");
+        }
+        else if (month == "dec")
+        {
+            await context.Response.WriteAsync($"Good Man u did this in {month}");
+
         }
         else
         {
